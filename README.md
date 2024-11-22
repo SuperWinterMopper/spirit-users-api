@@ -1,0 +1,3 @@
+README FOR ASSIGNMENT 7
+
+My key takeaway is seeing how an API is actually called, and understanding some of the usability of psql. Some of my largest problems included getting the API calls and configurations right, understanding what to even do (I missed the last meeting). Particularly, just getting the knowledge that the backend was this file seperated from the front end took me a few hours to know. After that, however, it was mostly pretty major-problem free. I used Postman to test the PUT, DELETE, GET, and POST functions for my API, so they should work. I haven't actually integrated their functionality for the front end yet, which is what I'm currently working on. If you see a Login.js that isn't finished, that's what that is. 
