@@ -1,7 +1,7 @@
 
 // PSQL code before hw-8
-/*
 
+/*
 import express from "express";
 import cors from "cors";
 import pkg from "pg";
@@ -96,7 +96,6 @@ app.listen(process.env.PORT, () => {
 // import { createClient } from "@supabase/supabase-js";
 
 
-
 const express = require("express");
 const cors = require("cors");
 const { createClient } = require("@supabase/supabase-js");
@@ -119,7 +118,26 @@ app.use(
 
 app.use(express.json());
 
-app.get("/users/profiles", async (req, res) => {
+const checkAuth = async (req, res, next) => {
+  const token = req.headers.authorization?.split(" ")[1];
+  if (!token) {
+    return res.status(401).json({ error: "No token provided" });
+  }
+
+  try {
+    const {
+      data: { user },
+      error,
+    } = await supabase.auth.getUser(token);
+    if (error) throw error;
+    req.user = user;
+    next();
+  } catch (error) {
+    res.status(401).json({ error: "Invalid token" });
+  }
+};
+
+app.get("/users/profiles", checkAuth, async (req, res) => {
   try {
     const { data, error } = await supabase
     .from('users')
@@ -145,15 +163,7 @@ app.get("/users/profiles", async (req, res) => {
   }
 });
 
-app.listen(process.env.PORT, () => {
-  console.log(`Server running on port ${process.env.PORT}`);
-});
-
-
-
-// rest of code is rest of code ethan had in his server.js. i think it's auth stuff 
-/*
-app.post("/api/register", async (req, res) => {
+app.post("/users/register", async (req, res) => {
   const { email, password } = req.body;
   try {
     const { data, error } = await supabase.auth.signUp({
@@ -167,7 +177,7 @@ app.post("/api/register", async (req, res) => {
   }
 });
 
-app.post("/api/login", async (req, res) => {
+app.post("/users/login", async (req, res) => {
   const { email, password } = req.body;
   try {
     const { data, error } = await supabase.auth.signInWithPassword({
@@ -181,31 +191,13 @@ app.post("/api/login", async (req, res) => {
   }
 });
 
-const checkAuth = async (req, res, next) => {
-  const token = req.headers.authorization?.split(" ")[1];
-  if (!token) {
-    return res.status(401).json({ error: "No token provided" });
-  }
-
-  try {
-    const {
-      data: { user },
-      error,
-    } = await supabase.auth.getUser(token);
-    if (error) throw error;
-    req.user = user;
-    next();
-  } catch (error) {
-    res.status(401).json({ error: "Invalid token" });
-  }
-};
-
-app.get("/api/protected", checkAuth, (req, res) => {
+app.get("/users/test_auth", checkAuth, (req, res) => {
   res.json({
     message: "You are authenticated!",
     user: req.user.email,
-    timestamp: new Date().toISOString(),
   });
 });
 
-*/
+app.listen(process.env.PORT, () => {
+  console.log(`Server running on port ${process.env.PORT}`);
+});
