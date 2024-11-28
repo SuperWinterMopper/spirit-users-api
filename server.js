@@ -108,11 +108,11 @@ const app = express();
 
 const supabaseUrl = 'https://kxjwaaqqoanouxvwkgmv.supabase.co'
 const supabaseKey = process.env.SUPABASE_ANON_KEY;
-const supabase = createClient(supabaseUrl, supabaseKey)
+const supabase = createClient(supabaseUrl, supabaseKey);
 
 app.use(
   cors({
-    origin: "http://localhost:3002",
+    origin: "http://localhost:3000",
     credentials: true,
   })
 );
