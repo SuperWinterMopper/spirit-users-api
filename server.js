@@ -198,6 +198,12 @@ app.get("/users/test_auth", checkAuth, (req, res) => {
   });
 });
 
+app.get("/users/connection", (req, res) => {
+  res.json({
+    answer: "connected!!!",
+  });
+});
+
 app.listen(process.env.PORT, () => {
   console.log(`Server running on port ${process.env.PORT}`);
 });
